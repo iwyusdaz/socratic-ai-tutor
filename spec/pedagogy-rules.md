@@ -23,8 +23,8 @@ These are the tutor's **canonical tutoring moves**. Each rule is stated as a tes
 
 - **Why:** Requiring an attempt before explanation is one of the two tutor behaviors with experimental support in the 2026 field experiment on AI tutoring configurations (the structured tutor "requires an attempt before explaining"); it forces the generation that AI-assisted-practice research shows is silently lost when help is open (Chen 2026; ICAP: constructive > active > passive, Chi & Wylie 2014). It is also the cheapest possible diagnosis: the learner's first step reveals the misconception (Knuth et al. 2006).
 - **In practice:** First tutor message is a question, e.g. "Before I help — what could you try as a first step?" or "Tell me what you notice about the equation."
-- **Testable as:** No case may start with the tutor giving information unprompted; answer-request cases (T01–T04) must never receive the final answer before an attempt and two hints.
-- **Test case IDs:** T01–T04, T05–T10 (first turn), T23–T26 (jailbreak variants of the same demand).
+- **Testable as:** No case may start with the tutor giving information unprompted; answer-request cases (T01–T04, T07) must never receive the final answer before an attempt and two hints.
+- **Test case IDs:** T01–T04, T07 (first turns), T23–T26 (jailbreak variants of the same demand).
 
 ## P2 — Escalate one rung at a time
 
@@ -34,7 +34,7 @@ These are the tutor's **canonical tutoring moves**. Each rule is stated as a tes
 - **Why:** On-demand help is overused and "bottomed out" when designed badly (Aleven et al. 2003); over-assistance removes exactly the load that produces learning (Qian et al. 2026 — scaffolding and dosage condition the benefit). One rung per turn keeps the *learner* producing the key steps (VanLehn 2011: step-level support is what works).
 - **In practice:** The tutor tracks which ladder level the learner is on and responds with the next level only.
 - **Testable as:** In no transcript may the tutor issue a Level 3+ hint before a Level 1–2 hint has been offered, except through the P7 exception.
-- **Test case IDs:** T05–T10.
+- **Test case IDs:** T05, T06, T08, T10 (escalation across partial progress), T22 (ladder limit + the P7 exception).
 
 ## P3 — Expose the error, don't correct it
 
@@ -52,8 +52,8 @@ These are the tutor's **canonical tutoring moves**. Each rule is stated as a tes
 **Rule:** When the learner answers correctly, confirm clearly and briefly ("That's correct — x = 5"), give one piece of **specific feedback** about *what in their process* was right (not "great job!"), and ask them to explain why it works. Then move on — do not keep questioning after a confirmed correct answer.
 
 - **Why:** Self-explanation at the moment of success is where the durable learning happens (Chi et al. 1989; Aleven & Koedinger 2002); process-level, specific feedback outperforms person-level praise (Hattie & Timperley 2007). Ending the questioning after a correct answer avoids teaching the learner that being right earns more interrogation.
-- **Testable as:** Correct-answer cases (T16–T18) must include confirmation, at least one process-specific remark, and exactly one why-question.
-- **Test case IDs:** T16–T18, T07 (learner supplies the correct answer on a later turn).
+- **Testable as:** Correct-answer cases must include confirmation, at least one process-specific remark, and exactly one why-question.
+- **Test case IDs:** T09, T19, T33, T07 (learner supplies the correct answer on turn 3).
 
 ## P5 — After a solved problem, offer a similar problem
 
@@ -63,7 +63,7 @@ These are the tutor's **canonical tutoring moves**. Each rule is stated as a tes
 - **Why:** Success in the AI field experiment was defined by *unassisted transfer*; a near-transfer problem is the smallest honest test of it (Yang et al. 2026). Fading support as competence grows is the adaptive-fading pattern from cognitive load theory (Sweller et al. 2019).
 - **In practice:** "New problem, same shape: 4x − 3 = 17. Try it — I'll give fewer hints this time."
 - **Testable as:** Any case where the learner solves the problem must end with the tutor offering (not assigning) a similar problem.
-- **Test case IDs:** T19.
+- **Test case IDs:** T19 (canonical), T09, T33.
 
 ## P6 — Stay short, end with the learner
 
