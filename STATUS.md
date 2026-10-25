@@ -1,6 +1,6 @@
 # STATUS
 
-**Updated:** 2026-10-25 · **Repo state:** built, locally verified, published to GitHub Pages (pending final verification steps listed below)
+**Updated:** 2026-10-25 · **Repo state:** built, verified, published — https://github.com/iwyusdaz/socratic-ai-tutor (Pages: https://iwyusdaz.github.io/socratic-ai-tutor/)
 
 ## Done
 
@@ -15,18 +15,20 @@
 - Evaluation methods inventory (`evaluation/METHODS.md`) + human-protocol pack (usability protocol, consent text, blind second-scorer instructions, manual VoiceOver script).
 - Root docs: README case study, DECISIONS, CHANGELOG, ATTRIBUTION, this file.
 
-## Verification (local, 2026-10-25)
+## Verification (2026-10-25, re-runnable)
 
 | Check | Result |
 |---|---|
-| gitleaks secret scan | see final report (run before publish) |
-| axe-core audit of docs pages | see final report |
-| linkcheck on docs | see final report |
-| Playwright keyboard tests | 38/38 pass |
-| Pipeline dry-runs (all 3) | pass, stubs in `dry-run/` headed "DRY RUN – NOT REAL RESULTS" |
-| Placeholder `.env` behavior | all pipelines exit 1 with clear message, zero network calls |
-
-(This table is finalized in the build report; the checks above are re-runnable: `npm run test:keyboard`, the three `--dry-run` commands in METHODS §How to run, plus workspace audit/linkcheck/gitleaks tools.)
+| gitleaks (history + tree, redacted) | no leaks found (8 commits scanned) |
+| `.env` in git history | absent (only `.env.example` with placeholders) |
+| Files > 50 MB | none |
+| axe-core audit (WCAG 2.1 A/AA + best practice), local + live | 0 violations (critical/serious/moderate/minor), 0 incomplete — landing, demo, transcripts |
+| linkcheck | local: 3 pages, 0 broken · live: 4 pages, 0 broken |
+| External citation URLs (9) | all HTTP 200 on 2026-10-25 |
+| Playwright keyboard/reflow tests (`npm run test:keyboard`) | 38/38 pass |
+| Pipeline dry-runs (`run-eval`, `score`, `run-adaptive-learner` via `--dry-run`) | pass; 620 stub files in `dry-run/` headed "DRY RUN – NOT REAL RESULTS" |
+| Placeholder `.env` behavior | all 3 pipelines exit 1 with clear message, zero network calls |
+| GitHub Pages | enabled (main `/docs`), build `built`, live URL 200 on all pages |
 
 ## Pending (requires owner action or future runs)
 
