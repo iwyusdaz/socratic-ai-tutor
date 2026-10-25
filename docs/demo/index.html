@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live demo — Socratic AI Tutor</title>
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Socratic AI Tutor</a>
+    <nav aria-label="Site">
+      <a href="../index.html">About</a>
+      <a href="../transcripts/index.html">Transcripts</a>
+      <a href="index.html" aria-current="page">Live demo</a>
+      <a href="https://github.com/iwyusdaz/socratic-ai-tutor">Repository</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+<h1>Live demo — bring your own key</h1>
+<p>
+  A minimal chat with the tutor, running entirely in <strong>your browser</strong> against your
+  own OpenAI-compatible API endpoint. There is no server behind this page: the key never leaves
+  your browser except in the request to the provider you choose.
+</p>
+
+<div class="notice warn">
+  <strong>Before you paste a key:</strong>
+  <ul>
+    <li>Use a <strong>restricted key with a spending limit</strong>. This page has no rate limiting and no cost cap — your key, your quota.</li>
+    <li>The key is kept <strong>in memory only</strong> (a JavaScript variable). It is never saved to <code>localStorage</code>, cookies, or logs, and closing the tab erases it.</li>
+    <li>The key is sent <strong>only</strong> to the base URL you enter below, directly from your browser. There is no proxy in between.</li>
+    <li>Your provider must allow direct browser (CORS) calls. Some providers block browser requests or require an opt-in header; if requests fail with a network/CORS error, that is usually why. Check your provider's browser/CORS policy.</li>
+    <li>Do not paste a production or broadly-scoped key. Do not share personal information in the chat.</li>
+  </ul>
+</div>
+
+<section id="key-panel" aria-labelledby="key-heading">
+  <h2 id="key-heading">1. Connect a model</h2>
+  <form id="key-form">
+    <div class="field">
+      <label for="base-url">API base URL (OpenAI-compatible, ends before <code>/chat/completions</code>)</label>
+      <input type="text" id="base-url" name="base-url" autocomplete="off" spellcheck="false"
+             value="https://api.openai.com/v1" placeholder="https://api.openai.com/v1">
+    </div>
+    <div class="field">
+      <label for="model-name">Model name</label>
+      <input type="text" id="model-name" name="model-name" autocomplete="off" spellcheck="false"
+             placeholder="e.g. gpt-4o-mini">
+    </div>
+    <div class="field">
+      <label for="api-key">API key <span class="hint">(kept in memory only; never stored or logged)</span></label>
+      <input type="password" id="api-key" name="api-key" autocomplete="off" spellcheck="false"
+             placeholder="sk-… or your provider's key format">
+    </div>
+    <div class="btn-row">
+      <button type="submit" id="connect-btn">Connect</button>
+      <button type="button" id="clear-key-btn" disabled>Clear key</button>
+    </div>
+  </form>
+  <p id="key-status" role="status" aria-live="polite">No key connected. The chat is disabled until you connect a key — nothing is sent anywhere until then.</p>
+</section>
+
+<section id="chat-section" aria-labelledby="chat-heading">
+  <h2 id="chat-heading">2. Practice</h2>
+  <p id="chat-disabled-note">
+    Connect a key above to start. The tutor uses the
+    <a href="https://github.com/iwyusdaz/socratic-ai-tutor/blob/main/spec/prompts/system-prompt-v3.md">v3 draft system prompt</a>
+    from the specification at temperature&nbsp;0, expecting to help with linear equations like
+    <code>3x + 5 = 20</code> after you have had a lesson on them.
+  </p>
+
+  <div class="notice">
+    <strong>Two things this tutor will not do:</strong> it will not hand over answers before you have genuinely
+    attempted the problem (that is the whole point), and it does not need any personal information — please
+    don't share any.
+  </div>
+
+  <div id="log" role="log" aria-live="polite" aria-label="Conversation with the tutor" tabindex="0"></div>
+  <p id="typing-status" role="status" aria-live="polite"></p>
+
+  <form id="chat-form">
+    <label for="chat-input">Your message to the tutor</label>
+    <textarea id="chat-input" rows="3" autocomplete="off" disabled
+      placeholder="e.g. I'm stuck on 3x + 5 = 20 — I subtracted 5 but I'm not sure from which side"></textarea>
+    <div class="btn-row">
+      <button type="submit" id="send-btn" disabled>Send</button>
+      <button type="button" id="reset-btn" disabled>Start over</button>
+    </div>
+    <p class="hint">Enter sends · Shift+Enter adds a new line · Math is plain text (3x + 5 = 20)</p>
+  </form>
+</section>
+
+<section aria-labelledby="privacy-heading">
+  <h2 id="privacy-heading">What this page does and does not store</h2>
+  <ul>
+    <li><strong>Stored: nothing.</strong> No localStorage, no cookies, no analytics, no server. Reloading the page clears everything, including your key and the conversation.</li>
+    <li><strong>Sent: two things.</strong> Your messages and the conversation so far go to the API base URL you entered, with your key in the authorization header. Nothing else, nowhere else.</li>
+    <li><strong>Logged: nothing.</strong> The page never writes your key or messages to the browser console.</li>
+  </ul>
+</section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>Part of the <a href="https://github.com/iwyusdaz/socratic-ai-tutor">Socratic AI Tutor</a> case study.
+    Content CC BY 4.0 · Code MIT. This demo is a design artifact, not a product; no learner data is collected.</p>
+  </div>
+</footer>
+
+<script src="chat.js"></script>
+</body>
+</html>

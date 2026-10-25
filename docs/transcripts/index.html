@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Example transcripts — Socratic AI Tutor</title>
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Socratic AI Tutor</a>
+    <nav aria-label="Site">
+      <a href="../index.html">About</a>
+      <a href="index.html" aria-current="page">Transcripts</a>
+      <a href="../demo/index.html">Live demo</a>
+      <a href="https://github.com/iwyusdaz/socratic-ai-tutor">Repository</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+<h1>Example transcripts</h1>
+
+<div class="notice">
+  <strong>Example transcripts coming soon — pending real evaluation runs.</strong>
+  No evaluation has run yet, so there are no real tutor conversations to show here.
+  Nothing on this page is simulated, invented, or written by hand to look like model output.
+</div>
+
+<h2>What will appear here</h2>
+<p>
+  Once the evaluation pipelines have run with real API keys, this page will publish
+  6–8 <strong>curated, verbatim transcripts from real runs</strong> — including at least one
+  v1-baseline failure and one v3 success on the same case, side by side, so the
+  difference in tutor behavior is visible. Every transcript will be labeled with:
+</p>
+<ul>
+  <li>the test case ID and category from <a href="https://github.com/iwyusdaz/socratic-ai-tutor/blob/main/eval/test-cases.json">eval/test-cases.json</a>;</li>
+  <li>the prompt version it came from;</li>
+  <li>the tutor model name, temperature and run date;</li>
+  <li>the rubric scores it received, and from whom (human scorer and/or the blinded AI judge panel, labeled by method).</li>
+</ul>
+
+<h2>Why transcripts, not screenshots of a fake chat</h2>
+<p>
+  This project's claim is about <em>tutor behavior</em>, and behavior evidence should be
+  inspectable. Publishing real transcripts — including unflattering ones — is the honest
+  version of a "before/after" demo. Publishing anything else would be fabrication.
+  The <a href="../demo/index.html">live demo</a> exists so you can exercise the v3 prompt
+  yourself with your own key while the evaluation runs are pending.
+</p>
+
+<h2>Where the raw material lives</h2>
+<p>
+  Raw run outputs are written to <code>eval/results/&lt;version&gt;/</code> as JSON plus
+  readable Markdown transcripts (one file per case per run), with the model name, date
+  and parameters recorded in every file. When runs exist, they will appear in the
+  repository under <a href="https://github.com/iwyusdaz/socratic-ai-tutor/tree/main/eval/results">eval/results/</a>.
+  Until then that directory contains only a <a href="https://github.com/iwyusdaz/socratic-ai-tutor/blob/main/eval/results/summary.md">PENDING summary table</a>.
+</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>Part of the <a href="https://github.com/iwyusdaz/socratic-ai-tutor">Socratic AI Tutor</a> case study.
+    Content CC BY 4.0 · Code MIT.</p>
+  </div>
+</footer>
+</body>
+</html>

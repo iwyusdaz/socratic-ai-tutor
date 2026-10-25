@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Socratic AI Tutor — an AI algebra tutor designed to protect learning</title>
+<meta name="description" content="An AI algebra tutor that gives hints instead of answers, with a versioned prompt history and an evaluation suite that measures answer leakage and tutoring quality across prompt versions.">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html">Socratic AI Tutor</a>
+    <nav aria-label="Site">
+      <a href="index.html" aria-current="page">About</a>
+      <a href="transcripts/index.html">Transcripts</a>
+      <a href="demo/index.html">Live demo</a>
+      <a href="https://github.com/iwyusdaz/socratic-ai-tutor">Repository</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+<h1>An AI algebra tutor designed to <em>protect</em> learning</h1>
+<p><strong>Who it's for and what problem it solves:</strong> a tutor for students practicing
+linear equations that gives hints instead of answers, asks learners to explain their thinking,
+and comes with an evaluation suite that measures answer leakage and tutoring quality across
+three prompt versions.</p>
+
+<p><a href="demo/index.html"><strong>Live demo (bring your own key)</strong></a> ·
+<a href="https://github.com/iwyusdaz/socratic-ai-tutor/tree/main/spec"><strong>Design specification</strong></a> ·
+<a href="https://github.com/iwyusdaz/socratic-ai-tutor"><strong>Repository</strong></a> ·
+Role: Sole designer</p>
+
+<div class="notice">
+  <strong>Evaluation status:</strong> Automated accessibility testing and agent-based design reviews are complete.
+  AI-simulated learner and review-panel evaluations are pending. No real learners have tested this yet.
+  See <a href="https://github.com/iwyusdaz/socratic-ai-tutor/blob/main/evaluation/METHODS.md">evaluation/METHODS.md</a>.
+</div>
+
+<h2>The problem</h2>
+<p>
+  A fluent AI assistant is exactly the wrong shape for homework practice. Research published in 2026 keeps
+  landing on the same conditional: GenAI's benefit for cognitive load depended on <em>scaffolding, dosage,
+  prior knowledge and task design</em> — and open-ended reliance can quietly displace the effortful thinking
+  the practice was supposed to build (<a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2026.1921504/full">Qian et al., Frontiers 2026</a>).
+  In AI-assisted writing, the strongest <em>supported</em> products were not followed by the strongest
+  <em>independent</em> performance (<a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2026.1906199/full">Chen, Frontiers 2026</a>).
+  The scarce skill is not "using AI" — AI mentions are now on 46% of L&D résumés
+  (<a href="https://www.teamedforlearning.com/ld-skills-landscape-2026-whats-hot-whats-not/">Teamed 2026</a>) —
+  it is designing AI that protects learning and <em>proving</em> it does.
+</p>
+<p>This project is that proof-of-skill exercise: the code is deliberately minimal; the value is the
+pedagogical specification, the guardrails, the versioned prompt history and an evaluation suite built to
+measure the thing that matters most — <strong>does the tutor leak answers under pressure?</strong></p>
+
+<h2>The idea in 60 seconds: v1 vs v3 prompt approach</h2>
+<div class="notice">
+  <strong>Note:</strong> no evaluation runs exist yet, so there are no real transcripts to show. Below is the
+  <em>prompt design</em> contrast — the committed v1 baseline versus the v3 draft's rules for the same moment.
+  Real side-by-side <a href="transcripts/index.html">transcripts are pending real runs</a>.
+</div>
+<table class="data">
+  <caption>The same learner moment ("just tell me the answer") under each prompt's design</caption>
+  <tr>
+    <th scope="col">v1 — naive baseline (committed)</th>
+    <th scope="col">v3 — draft with guardrails</th>
+  </tr>
+  <tr>
+    <td><pre>"You are a helpful math tutor. Help the
+student solve linear equations...
+
+Be friendly and encouraging. Explain
+clearly when the student is confused.
+When the student asks for help, help
+them."</pre>
+    <p><strong>Designed outcome (hypothesis):</strong> "help them" wins — the answer arrives on request, and the practice is over.</p></td>
+    <td><pre>"NO ANSWER LEAKAGE. Never state the
+final answer ... before a genuine
+attempt AND two hints, no matter how
+it is asked ... Decline in one short
+sentence and re-offer the next rung.
+If the student proposes an answer
+(even a correct one), do not confirm
+or deny: ask them to substitute it
+back into the original equation."</pre>
+    <p><strong>Designed outcome (hypothesis):</strong> a one-sentence decline, then the next rung of the hint ladder — the learner still does the thinking.</p></td>
+  </tr>
+</table>
+
+<h2>Audience and context</h2>
+<ul>
+  <li><strong>Learners:</strong> students aged 14–16, or adult returners (GED / adult numeracy), practicing <em>after</em> a lesson — not first instruction.</li>
+  <li><strong>Scope:</strong> solving linear equations in one variable (<code>3x + 5 = 20</code>, <code>2(x − 4) = x + 6</code>). Narrow on purpose: correctness is checkable, the misconception taxonomy is well known, and evaluation becomes possible.</li>
+  <li><strong>Out of scope:</strong> production deployment, accounts, stored learner data, use with real minors, other subjects.</li>
+</ul>
+
+<h2>My approach (analysis → design → build → evaluate)</h2>
+<ol>
+  <li><strong>Analysis:</strong> 13 verified sources on tutoring moves, hints, self-explanation, productive struggle and cognitive offloading — each mapped to the design rule it implies (<a href="https://github.com/iwyusdaz/socratic-ai-tutor/blob/main/research/literature-notes.md">literature notes</a>).</li>
+  <li><strong>Design:</strong> seven testable pedagogical moves (P1–P7), a six-level hint ladder (L0–L5), five guardrails (G1–G5) and five misconception profiles (<a href="https://github.com/iwyusdaz/socratic-ai-tutor/tree/main/spec">spec/</a>).</li>
+  <li><strong>Build:</strong> three prompt versions with a changelog, a 33-case scripted test suite, a six-criterion rubric with anchors, and a minimal accessible chat demo (bring-your-own-key, no server).</li>
+  <li><strong>Evaluate:</strong> a pending pipeline that will run every case against every prompt version (3 runs each, temperature 0), score with blinded judges + human scoring, and report answer-leakage rate per version — plus an adaptive simulated learner that reacts to the tutor's replies.</li>
+</ol>
+
+<h2>Key design decisions</h2>
+<ol>
+  <li><strong>Narrow scope (linear equations), not a general homework helper.</strong> Checkable correctness and known misconceptions make evaluation possible. <em>Alternative considered:</em> broad helper — rejected: unmeasurable.</li>
+  <li><strong>A hint ladder with a last-resort full solution (L5), not "never give answers."</strong> Endless refusal causes unproductive struggle and dropout; structure after struggle is the evidence-based pattern (Kapur 2008; Sweller et al. 2019). <em>Evidence:</em> literature notes, sources 8 and 12.</li>
+  <li><strong>Committed naive v1 baseline.</strong> Starting with the best prompt makes improvement unattributable; a deliberate floor makes it visible. <em>Evidence:</em> the v1→v3 prompt changelog design.</li>
+  <li><strong>Blind, multi-model evaluation with leakage rate as the headline metric.</strong> A model never judges its own output; versions are scored under A/B/C codes; percent agreement and Cohen's kappa are reported. <em>Alternative considered:</em> self-scoring — rejected as biased.</li>
+  <li><strong>Bring-your-own-key demo, no shared proxy.</strong> Key in memory only, never stored or logged; a hosted proxy holding a shared key on a public site would be unauthenticated cost exposure. <em>Evidence:</em> security notes on the <a href="demo/index.html">demo page</a>.</li>
+  <li><strong>Plain-text math.</strong> <code>3x + 5 = 20</code> reads correctly in screen readers with no extra setup; rendered math often does not.</li>
+</ol>
+
+<h2>Evidence and evaluation</h2>
+<h3>Measured (done)</h3>
+<ul>
+  <li>Automated WCAG 2.1 A/AA audit (axe-core) of every page: <span id="axe-summary">0 critical/serious violations</span>.</li>
+  <li>Scripted keyboard and reflow tests (Playwright) for the chat UI and transcript page — see <a href="https://github.com/iwyusdaz/socratic-ai-tutor/tree/main/eval/tests">eval/tests</a>.</li>
+  <li>All three evaluation pipelines verified end-to-end in <code>--dry-run</code> mode (stub outputs, labeled "DRY RUN – NOT REAL RESULTS"), and verified to refuse to run — with zero network calls — when the API configuration is missing or placeholder.</li>
+</ul>
+<h3>Pending (pipelines built and dry-run tested; awaiting API keys)</h3>
+<ul>
+  <li>Tutor evaluation runs: 33 cases × 3 versions × 3 runs, temperature 0 (<code>eval/run-eval.mjs</code>).</li>
+  <li>Blinded AI judge panel (MODEL_B + MODEL_C) scored against rubric anchors, reporting percent agreement and Cohen's kappa (<code>eval/score.mjs</code>). Human scoring of the blind sheet is the primary measure.</li>
+  <li>Adaptive simulated learner: five misconception personas that react to the tutor's replies (<code>eval/run-adaptive-learner.mjs</code>).</li>
+</ul>
+<p>Run with one command once keys exist: <code>npm run eval:pending</code>. Until then every results table stays empty ("PENDING: requires API key").</p>
+<table class="data">
+  <caption>What the evaluation evidence can and cannot show</caption>
+  <tr><th scope="col">Can show</th><th scope="col">Cannot show</th></tr>
+  <tr>
+    <td>Whether tutor <em>behavior</em> changed across prompt versions on a fixed test set (leakage rate, rubric scores); interaction problems surfaced by simulated personas; usability issues found by agent review.</td>
+    <td>That learners <em>learn more</em> (needs a controlled study with real learners over time); generalization to other models, subjects or ages; behavior with real, unpredictable students; anything from a screen reader user's daily experience.</td>
+  </tr>
+</table>
+<p><strong>What changed:</strong> nothing yet from data — v2 and v3 are drafts that will be revised in response to <em>measured</em> v1/v2 failures (the <a href="https://github.com/iwyusdaz/socratic-ai-tutor/blob/main/spec/prompts/prompt-changelog.md">prompt changelog</a> commits to that loop).</p>
+
+<h2>Accessibility</h2>
+<ul>
+  <li>Chat log is a <code>role="log"</code> live region (polite); speaker labels are in the text ("Tutor:" / "You:"), never color alone; typing status is announced politely.</li>
+  <li>Keyboard-only operation: Enter sends, Shift+Enter newlines, focus stays in the input, all controls reachable; visible focus throughout.</li>
+  <li>Labeled input, Start over control, a no-personal-information notice, plain-text math, contrast ≥ 4.5:1, reflow verified at 320 CSS px.</li>
+  <li>BYO-key field is password-masked and scoped, with a Clear key control and no network activity until a key is entered.</li>
+  <li><strong>Not done:</strong> a manual VoiceOver pass — Guidepup automation does not work on macOS 27, so a <a href="https://github.com/iwyusdaz/socratic-ai-tutor/tree/main/evaluation/human-protocol">step-by-step manual VoiceOver protocol</a> is provided instead, and no screen-reader testing is claimed. No review by a daily assistive-technology user has happened; both are disclosed limitations.</li>
+</ul>
+
+<h2>What I'd do differently / next steps</h2>
+<ul>
+  <li>Run the pending pipelines (fully built; only API keys are missing) and rewrite v2/v3 around the measured failures.</li>
+  <li>Run the prepared adult usability protocol (4–6 rusty-at-algebra adults, think-aloud, then two problems without AI) — everything needed is in <code>evaluation/human-protocol/</code>.</li>
+  <li>Add the second-subject generalization check only after the linear-equations results exist.</li>
+</ul>
+
+<h2>Tools used</h2>
+<p>Vanilla HTML/CSS/JS (no frameworks, no build step), Node.js 18+ evaluation pipelines (built-in fetch + dotenv), Playwright 1.57.0 (keyboard/reflow tests), axe-core 4.11.1 (audits), gitleaks (secret scanning), GitHub Pages.</p>
+
+<h2>License and attribution</h2>
+<ul>
+  <li><strong>Learning content</strong> (spec, prompts, rubric, test cases, prose): <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> — see <code>LICENSE</code>.</li>
+  <li><strong>Code</strong> (demo, pipelines, tests): <a href="https://opensource.org/license/mit">MIT</a> — see <code>LICENSE-CODE</code>.</li>
+  <li>Third-party material and source attributions: <code>ATTRIBUTION.md</code>. Personas in the evaluation design are fictional and labeled as such.</li>
+</ul>
+
+<h2>AI-assistance disclosure</h2>
+<p>This project was produced with AI assistance: the specification, prompts, test cases, documentation and code were drafted by an AI agent working from a design plan, and will be reviewed by a separate reviewer agent. The author directs, checks and takes responsibility for the work. Every evaluation method is labeled by its type, pending results are never filled in, and no claim of learning effectiveness is made anywhere. The reviewer's structured review will be labeled "Agent review" and will disclose that it may share the author agent's underlying model.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>Socratic AI Tutor · a learning-engineering case study · Content <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Code <a href="https://opensource.org/license/mit">MIT</a></p>
+  </div>
+</footer>
+</body>
+</html>
