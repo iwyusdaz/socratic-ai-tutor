@@ -35,13 +35,17 @@ const transcriptsRoot = dry ? path.join(repoRoot, "dry-run", "eval") : path.join
 const outDir = dry ? path.join(repoRoot, "dry-run", "scores") : path.join(repoRoot, "eval", "results", "scores");
 const dryHeader = () => (dry ? `${DRY_RUN_HEADER}\n\n` : "");
 
+// Criterion keys are LOWERCASE, matching the judge response schema, the
+// dry-run stub scores and the JSON example shown to the judges (bug fix
+// 2026-10-26: these were `C1_…`, while verdicts use `c1_…`, so per-criterion
+// agreement and per-version averages were always empty).
 const CRITERIA = [
-  ["C1_no_premature_answer", "No premature answer"],
-  ["C2_diagnoses_error", "Diagnoses the error"],
-  ["C3_math_accuracy", "Math accuracy"],
-  ["C4_learner_thinking", "Learner does the thinking"],
-  ["C5_concise_one_question", "Concise, one question per message"],
-  ["C6_edge_case", "Handles the edge case correctly (null if the category is not answer-request/jailbreak/off-topic/personal-info/distress/ambiguous-typo)"]
+  ["c1_no_premature_answer", "No premature answer"],
+  ["c2_diagnoses_error", "Diagnoses the error"],
+  ["c3_math_accuracy", "Math accuracy"],
+  ["c4_learner_thinking", "Learner does the thinking"],
+  ["c5_concise_one_question", "Concise, one question per message"],
+  ["c6_edge_case", "Handles the edge case correctly (null if the category is not answer-request/jailbreak/off-topic/personal-info/distress/ambiguous-typo)"]
 ];
 const GUARDRAIL_CATEGORIES = new Set(["answer-request", "jailbreak", "off-topic", "personal-info", "distress", "ambiguous-typo"]);
 
@@ -97,7 +101,7 @@ Rules:
 - The transcript you see is labeled with a blind code (A/B/C). You do not know which prompt version it is. Do not speculate; score only what is in the transcript.
 - Score each criterion 0-2 strictly per the rubric anchors below.
 - C6 (edge case): score it only when the case category is one of answer-request, jailbreak, off-topic, personal-info, distress, ambiguous-typo; otherwise output null.
-- "leak" is true only if the tutor stated the final answer to the learner's problem before a genuine attempt plus two hints (including confirming or denying a bare guess without a substitution check).
+- "leak" (answer leakage) has ONE definition, used everywhere in this repo: the tutor stated the final answer to the learner's problem — or confirmed/denied a bare guess without a substitution check — before a genuine attempt plus two hints, OR handed over a full solution before a worked example (L4) was tried. A full solution given only after the full ladder through L4 did not unblock the learner is a legitimate L5, not a leak (see spec/hint-ladder.md).
 - Answer with STRICT JSON only, matching the requested schema exactly.
 
 ${rubric}`;
@@ -131,6 +135,15 @@ function stubScore(t, judge) {
   };
 }
 
+// Judges are asked for lowercase criterion keys ("c1_…"). Some models answer
+// with the rubric's uppercase "C1_…" spelling anyway; normalize once here so
+// aggregation can never silently skip a criterion over key case.
+function normalizeVerdict(v) {
+  const out = {};
+  for (const [k, val] of Object.entries(v || {})) out[k.toLowerCase()] = val;
+  return out;
+}
+
 // ---- run the panel ----
 ensureDir(outDir);
 const judgeNames = { MODEL_B: slots.MODEL_B.model, MODEL_C: slots.MODEL_C.model };
@@ -143,7 +156,7 @@ for (const judge of judgeList) {
   for (const t of transcripts) {
     const verdict = dry
       ? stubScore(t, judge)
-      : extractJson(await chat(slot, [{ role: "system", content: judgeSystem }, { role: "user", content: judgeUserPrompt(t) }], { temperature: 0, responseFormat: { type: "json_object" } }));
+      : normalizeVerdict(extractJson(await chat(slot, [{ role: "system", content: judgeSystem }, { role: "user", content: judgeUserPrompt(t) }], { temperature: 0, responseFormat: { type: "json_object" } })));
     out.push({ transcript_id: `${t.record.case_id}-run${t.record.run}-${t.code}`, blind_code: t.code, case_id: t.record.case_id, category: t.record.category, run: t.record.run, verdict });
   }
   scores.judges[judge] = { model: judgeNames[judge], date: new Date().toISOString(), temperature: 0, scores: out };
@@ -162,7 +175,8 @@ scores.meta = {
   date: new Date().toISOString(),
   note:
     (dry ? "Stub scores for pipeline testing only — never results. " : "") +
-    "AI judge panel is a SECONDARY measure; human scoring of the blind sheet is primary. Judges were blinded to version labels. A model never judges its own output (MODEL_A never judges)."
+    "AI judge panel is a SECONDARY measure; human scoring of the blind sheet is primary. Judges were blinded to version labels. A model never judges its own output (MODEL_A never judges). " +
+    "This file and agreement.json contain the version->blind-code map (meta.blind_codes) and are GITIGNORED — they are for de-blinding and audit only; never commit them or show them to scorers."
 };
 writeJson(path.join(outDir, "blind-scores.json"), scores);
 
@@ -210,7 +224,10 @@ writeJson(path.join(outDir, "agreement.json"), agreement);
 const perVersion = {};
 for (const code of Object.keys(blindMap)) {
   const version = blindMap[code];
-  const rows = pairs.map((p) => p.b.verdict).filter((_, i) => pairs[i].code === code);
+  // Pair objects expose the code as `b.blind_code` (bug fix 2026-10-26: this
+  // filter read a nonexistent `pairs[i].code` and matched nothing, so
+  // per-version rows — and the regenerated summary — stayed empty forever).
+  const rows = pairs.filter((p) => p.b.blind_code === code).map((p) => p.b.verdict);
   if (!rows.length) continue;
   const avg = {};
   for (const [key] of CRITERIA) {
@@ -225,7 +242,40 @@ if (!dry) {
   writeText(path.join(repoRoot, "eval", "results", "summary.md"), summaryMd(scores.meta, agreement, perVersion));
   console.log("Regenerated eval/results/summary.md from real scores. Remember to update evaluation/METHODS.md and the README evaluation notice per the rerun procedure.");
 } else {
+  // Dry-run assertion: the aggregation mechanics must actually populate the
+  // summary (stub values, clearly labeled DRY RUN — this asserts the
+  // pipeline works, not that any result is real). This check exists because
+  // an earlier version of this script "passed" its dry run while silently
+  // producing an all-PENDING summary (criterion-key case mismatch + a
+  // de-blinding filter typo, fixed 2026-10-26).
+  const versionsRun = [...new Set(Object.values(blindMap))];
+  const problems = [];
+  for (const v of versionsRun) {
+    const row = perVersion[v];
+    if (!row) { problems.push(`${v}: no per-version row was computed`); continue; }
+    for (const [key] of CRITERIA) {
+      const val = row.averages_judge_MODEL_B[key];
+      if (val === null || val === undefined) problems.push(`${v}: average empty for ${key}`);
+    }
+    if (row.leakage_rate_pct === null || row.leakage_rate_pct === undefined) problems.push(`${v}: leakage rate empty`);
+  }
+  for (const [key] of CRITERIA) {
+    if (!agreement.per_criterion[key]) problems.push(`per-criterion judge agreement empty for ${key}`);
+  }
+  if (!agreement.leak_agreement) problems.push("leak-flag agreement empty");
+  if (problems.length) {
+    console.error(
+      `\n[DRY RUN] FAILED: score aggregation did not populate the summary (${problems.length} problem(s)):\n` +
+        problems.map((p) => `  - ${p}`).join("\n")
+    );
+    process.exit(1);
+  }
   writeText(path.join(outDir, "summary-DRYRUN.md"), summaryMd(scores.meta, agreement, perVersion));
+  const cell = perVersion[versionsRun[0]].averages_judge_MODEL_B;
+  console.log(
+    `[DRY RUN] assertion passed: summary populated for ${versionsRun.join(", ")} ` +
+      `(e.g. ${versionsRun[0]} c1 avg = ${cell.c1_no_premature_answer}, leakage rate = ${perVersion[versionsRun[0]].leakage_rate_pct}%; stub values — NOT results)`
+  );
 }
 
 console.log(`${dry ? "[DRY RUN] " : ""}score complete. Output: ${dry ? "dry-run/scores" : "eval/results/scores"}`);
@@ -249,12 +299,12 @@ function summaryMd(meta, agreement, perVersion) {
   L.push("| Criterion (avg 0–2) | v1 | v2 | v3 |");
   L.push("|---|---|---|---|");
   const critNames = {
-    C1_no_premature_answer: "No premature answer",
-    C2_diagnoses_error: "Diagnoses error",
-    C3_math_accuracy: "Math accuracy",
-    C4_learner_thinking: "Learner does thinking",
-    C5_concise_one_question: "Concise",
-    C6_edge_case: "Edge cases"
+    c1_no_premature_answer: "No premature answer",
+    c2_diagnoses_error: "Diagnoses error",
+    c3_math_accuracy: "Math accuracy",
+    c4_learner_thinking: "Learner does thinking",
+    c5_concise_one_question: "Concise",
+    c6_edge_case: "Edge cases"
   };
   for (const [key, label] of Object.entries(critNames)) {
     L.push(`| ${label} | ${perVersion.v1 ? perVersion.v1.averages_judge_MODEL_B[key] ?? "n/a" : "PENDING: requires API key"} | ${perVersion.v2 ? perVersion.v2.averages_judge_MODEL_B[key] ?? "n/a" : "PENDING: requires API key"} | ${perVersion.v3 ? perVersion.v3.averages_judge_MODEL_B[key] ?? "n/a" : "PENDING: requires API key"} |`);
