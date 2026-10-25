@@ -3,6 +3,9 @@
 .env.*
 !.env.example
 
+# Blind-code mapping for scoring (scorers must never see it)
+eval/results/blind-map.json
+
 # Dependencies
 node_modules/
 
