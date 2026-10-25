@@ -1,0 +1,19 @@
+{
+  "name": "socratic-ai-tutor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An AI algebra tutor designed to protect learning: hints instead of answers, explain-your-thinking moves, and an evaluation suite that measures answer leakage and tutoring quality across prompt versions (spec CC BY 4.0, code MIT).",
+  "type": "module",
+  "scripts": {
+    "eval:pending": "node eval/run-eval.mjs && node eval/score.mjs && node eval/run-adaptive-learner.mjs",
+    "eval:run": "node eval/run-eval.mjs",
+    "eval:score": "node eval/score.mjs",
+    "eval:adaptive": "node eval/run-adaptive-learner.mjs",
+    "eval:scoresheet": "node eval/make-score-sheet.mjs",
+    "test:keyboard": "node eval/tests/keyboard-tests.mjs"
+  },
+  "notes": "dotenv (17.3.1) and playwright (1.57.0) are resolved from the workspace root node_modules (Node resolution walks up). Nothing here is committed to node_modules. Pipelines are Node 18+ and use built-in fetch; only dotenv is a dependency.",
+  "engines": {
+    "node": ">=18"
+  }
+}
