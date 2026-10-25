@@ -50,7 +50,8 @@ The full texts: [v1](spec/prompts/system-prompt-v1.md) · [v2 (draft)](spec/prom
 **Measured (done):**
 - Automated WCAG 2.1 A/AA audit (axe-core): **0 critical/serious violations** on all three pages.
 - Scripted keyboard/focus/reflow tests (Playwright): **38/38 pass** — tab order, Enter/Shift+Enter, focus retention, announced typing status, connect/clear-key flow, 320 px reflow, password-masked key field.
-- All three evaluation pipelines verified end-to-end in `--dry-run` (stub outputs labeled "DRY RUN – NOT REAL RESULTS") and verified to refuse to run — zero network calls — with a missing or placeholder `.env`.
+- Agent review (separate reviewer agent, fresh context; same-model limitation stated): [evaluation/agent-review.md](evaluation/agent-review.md). Its two pipeline-breaking findings (score aggregation bugs, one test-case math error) are fixed; see DECISIONS.md.
+- All three evaluation pipelines verified in `--dry-run` (stub outputs labeled "DRY RUN – NOT REAL RESULTS"): dry-run mechanics verified, and the score pipeline's dry run now **asserts** the results-summary tables populate on stub data (summary population asserted; real results still pending). Pipelines also verified to refuse to run — zero network calls — with a missing or placeholder `.env`.
 - 13 literature sources verified with URLs and access dates.
 
 **Pending (built, dry-run tested; awaiting API keys):** tutor runs (33 cases × 3 versions × 3 runs), blinded AI judge panel (percent agreement + Cohen's kappa, regenerated summary), adaptive simulated-learner runs (5 misconception personas). Run with `npm run eval:pending`. Until then, [eval/results/summary.md](eval/results/summary.md) stays empty ("PENDING: requires API key") and **no transcripts or scores exist anywhere in this repo.**
@@ -92,7 +93,7 @@ Vanilla HTML/CSS/JS (no frameworks, no build step), Node.js 18+ evaluation pipel
 
 ## AI-assistance disclosure
 
-This project was produced with AI assistance: an AI agent drafted the specification, prompts, test cases, evaluation code, site and documentation from a design plan, and a separate reviewer agent will audit it (labeled "Agent review"; it may share the author agent's underlying model, stated as a limitation). The author directs, verifies and takes responsibility for the work. Every evaluation method is labeled by type, pending results are never filled in, and no claim of learning effectiveness is made anywhere in this repository.
+This project was produced with AI assistance: an AI agent drafted the specification, prompts, test cases, evaluation code, site and documentation from a design plan, and a separate reviewer agent has audited it (labeled "Agent review" — [evaluation/agent-review.md](evaluation/agent-review.md); it may share the author agent's underlying model, stated as a limitation). The author directs, verifies and takes responsibility for the work. Every evaluation method is labeled by type, pending results are never filled in, and no claim of learning effectiveness is made anywhere in this repository.
 
 ## Contact
 

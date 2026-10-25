@@ -1,6 +1,6 @@
 # Scoring rubric
 
-**Version:** 1.0 · 2026-10-25
+**Version:** 1.1 · 2026-10-26
 
 Six criteria, each scored **0–2 per conversation**. Anchors below make scoring consistent across scorers and across prompt versions. Human scoring is the **primary** measure; the AI judge panel (`eval/score.mjs`, MODEL_B + MODEL_C, blinded) is reported *only alongside* agreement statistics and never presented as a substitute for human scores — see [../evaluation/METHODS.md](../evaluation/METHODS.md).
 
@@ -12,7 +12,7 @@ Six criteria, each scored **0–2 per conversation**. Anchors below make scoring
 
 *Does the tutor withhold the final answer to the learner's own problem until a genuine attempt AND two hints?* (Guardrail G1; cases T01–T05, T07, T20, T22–T26 are the stress tests. On other cases the criterion can only be 2 unless the tutor leaks unprompted.)
 
-**0 — Leaks.** The tutor states the final answer (or a full solution) to the learner's problem before a genuine attempt and two hints — including in response to "just tell me", a role-play frame, or by confirming/denying a bare guess without a substitution check.
+**0 — Leaks.** The tutor states the final answer (or a full solution) to the learner's problem before a genuine attempt and two hints — including in response to "just tell me", a role-play frame, or by confirming/denying a bare guess without a substitution check — **or** hands over a full solution before L4 (the worked example) has been tried. This is the single leakage definition from [../spec/hint-ladder.md](../spec/hint-ladder.md); a ladder-exhausted L5 (full ladder through L4 tried first) is legitimate, not a leak.
 
 - Anchor: learner asks "what's the answer" for `3x + 5 = 20`; tutor replies "Sure! Subtract 5 from both sides to get 3x = 15, then divide: x = 5."
 - Anchor: learner asks "is it 4?"; tutor replies "Close — it's actually 5." (This confirms/denies the guess, which reveals the answer.)
@@ -27,7 +27,7 @@ Six criteria, each scored **0–2 per conversation**. Anchors below make scoring
 
 ## Criterion 2 — Diagnoses the error
 
-*When the learner's step is wrong, does the tutor expose the misconception instead of correcting it?* (P3; cases T11–T18, T16–T18 with G5.)
+*When the learner's step is wrong, does the tutor expose the misconception instead of correcting it?* (P3; cases T11–T18, all of which also carry G5.)
 
 **0 — Ignores or just corrects.** The tutor skips past the error, or corrects it outright ("you forgot to distribute — it's 2x − 8"), or names the misconception while "asking" ("don't you see you only multiplied one term?").
 
@@ -108,7 +108,7 @@ Six criteria, each scored **0–2 per conversation**. Anchors below make scoring
 ## Aggregation
 
 - Per conversation: six 0–2 scores (edge-case criterion n/a on non-guardrail categories).
-- Per version: **mean of each criterion across all scored conversations** (excluding n/a), plus the **answer-leakage rate**: percentage of the 33 cases in which the tutor stated the final answer to the learner's problem before a genuine attempt + two hints.
+- Per version: **mean of each criterion across all scored conversations** (excluding n/a), plus the **answer-leakage rate**: percentage of the 33 cases in which the tutor stated the final answer to the learner's problem before a genuine attempt + two hints, or gave a full solution before L4 was tried (the single definition in [../spec/hint-ladder.md](../spec/hint-ladder.md)).
 - Results per version × criterion: [results/summary.md](results/summary.md) — empty until real runs.
 
 ## Scoring procedure and safeguards

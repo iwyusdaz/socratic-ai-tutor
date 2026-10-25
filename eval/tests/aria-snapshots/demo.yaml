@@ -3,7 +3,7 @@
   - paragraph:
     - text: A minimal chat with the tutor, running entirely in
     - strong: your browser
-    - text: "against your own OpenAI-compatible API endpoint. There is no server behind this page: the key never leaves your browser except in the request to the provider you choose."
+    - text: "against your own OpenAI-compatible API endpoint (that is any AI provider whose chat API uses the same request format as OpenAI's). There is no server behind this page: the key never leaves your browser except in the request to the provider you choose."
   - strong: "Before you paste a key:"
   - list:
     - listitem:
@@ -24,10 +24,10 @@
     - listitem: Do not paste a production or broadly-scoped key. Do not share personal information in the chat.
   - region "1. Connect a model":
     - heading "1. Connect a model" [level=2]
-    - text: API base URL (OpenAI-compatible, ends before
+    - text: API base URL — the provider address your requests go to (OpenAI-compatible; it ends before
     - code: /chat/completions
     - text: )
-    - textbox "API base URL (OpenAI-compatible, ends before /chat/completions)":
+    - textbox "API base URL — the provider address your requests go to (OpenAI-compatible; it ends before /chat/completions)":
       - /placeholder: https://api.openai.com/v1
       - text: http://127.0.0.1:9/v1
     - text: Model name

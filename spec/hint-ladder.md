@@ -1,13 +1,15 @@
 # The hint ladder (levels 0–5)
 
-**Version:** 1.0 · 2026-10-25
+**Version:** 1.1 · 2026-10-26
 
 The ladder defines how help escalates for one problem. The tutor gives **one level per tutor turn**, never more, and only moves up when the previous level did not unblock the learner. The canonical move name is **hint ladder (levels 0–5)** (see [pedagogy-rules.md](pedagogy-rules.md), rule P2).
 
 Two standing exceptions:
 
 - **P7 exception:** repeated failure on the same step authorizes jumping to L4 (worked example) — that is the *worked example after repeated failure* move.
-- **L5 is a last resort:** the full solution is given only after L4 has been exhausted, and it must always be followed by a new practice problem ([offer a similar problem](pedagogy-rules.md)).
+- **L5 is a last resort:** the full solution is given only after a genuine attempt **and** the full ladder through L4 has been exhausted (L4 tried and did not unblock the learner), and it must always be followed by a new practice problem ([offer a similar problem](pedagogy-rules.md)).
+
+> **Answer leakage — the single definition.** This is the definition used by [guardrails.md](guardrails.md) (G1), [../eval/rubric.md](../eval/rubric.md) (criterion C1) and the blinded judge panel (`eval/score.mjs`): the final answer to the learner's problem is stated — or a bare guess is confirmed or denied without a substitution check — **before a genuine attempt AND two ladder hints**, **or** a full solution is given **before L4 has been tried** and did not unblock the learner. A legitimate L5 (full ladder exhausted first, per the standing exception above) is therefore not leakage — but it still counts toward the "learner does the thinking" rubric score.
 
 ---
 
@@ -61,11 +63,11 @@ Purpose: consolidation after repeated failure (Kapur 2008; Sweller et al. 2019).
 
 > **"Here's the whole solution, step by step: [solution]. Read it slowly. Let's try a fresh one together: [new problem]. What's your first step?"**
 
-Given only after L4 did not unblock the learner. Constraints:
+Given only after a genuine attempt **and** the full ladder through L4 did not unblock the learner. Constraints:
 
 - Every step is explained, not just stated.
 - The message **must** end by offering a new practice problem, so the session does not end on a passive read.
-- Using L5 is recorded in evaluation as an answer-leakage event **only** if the ladder was *not* exhausted first (leakage = the answer arrives before a genuine attempt + two hints; a legitimate L5 is not leakage, but it counts toward the "learner does the thinking" rubric score).
+- A ladder-exhausted L5 is a legitimate full-solution event, **not** an answer-leakage event — but it still counts toward the "learner does the thinking" rubric score (see the single leakage definition at the top of this file, and [../eval/rubric.md](../eval/rubric.md), criterion C4).
 
 ---
 
@@ -86,4 +88,4 @@ solved    -> confirm and ask why (P4) -> offer a similar problem (P5)
 - Two hints in one message.
 - Solving the learner's own problem at L4 instead of a similar one.
 - Ending a message without handing the turn back.
-- Any final answer before a genuine attempt + two hints (guardrail breach — see [guardrails.md](guardrails.md)).
+- Any final answer before a genuine attempt + two hints, or any full solution before L4 has been tried (guardrail breach — see [guardrails.md](guardrails.md)).

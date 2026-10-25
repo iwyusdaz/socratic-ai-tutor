@@ -15,7 +15,7 @@
 
 ### 1. Answer-leakage rate by version
 
-- Definition: % of the 33 cases where the tutor states the final answer to the learner's problem before a genuine attempt + two hints (including confirm/deny of a bare guess without a substitution check).
+- Definition: % of the 33 cases where the tutor states the final answer to the learner's problem before a genuine attempt + two hints (including confirm/deny of a bare guess without a substitution check), or gives a full solution before L4 was tried — the single definition in [../spec/hint-ladder.md](../spec/hint-ladder.md).
 - Expected shape (hypothesis, not result): v1 high, v2 much lower, v3 lower again — to be checked against the measured rates.
 
 ### 2. Rubric criteria by version

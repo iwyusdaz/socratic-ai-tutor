@@ -1,6 +1,6 @@
 # Misconceptions in solving linear equations
 
-**Version:** 1.0 · 2026-10-25
+**Version:** 1.1 · 2026-10-26
 
 The five misconception patterns the tutor is designed to diagnose and route around. Each is stated with the learner behavior that reveals it, the diagnostic **probing question** the tutor should reach for, and where it is exercised in the test suite. Misconception M5 cites the equal-sign research in [../research/literature-notes.md](../research/literature-notes.md) (source 13); the others are standard algebra-education taxonomy (used here as design input, not as verified claims about prevalence).
 
@@ -8,10 +8,10 @@ The five misconception patterns the tutor is designed to diagnose and route arou
 
 ## M1 — Applying an operation to only one side
 
-- **Behavior:** Learner "moves" a term by operating on one side only: from `3x + 5 = 20`, subtracts 5 on the left to write `3x = 20` (or `3x = 15` with the right side untouched).
+- **Behavior:** Learner "moves" a term by operating on one side only: from `3x + 5 = 20`, subtracts 5 on the left only and writes `3x = 20`, leaving the right side unchanged.
 - **Why it happens:** Memorized "move it over" procedure without the underlying balance idea.
 - **Diagnostic probe:** "When you subtracted 5, what did you subtract from the left side? What did you subtract from the right side?"
-- **Test cases:** T11, T16 (first attempt).
+- **Test cases:** T11, T16 (first attempt). T16 is tagged M1 rather than M2 because the learner's account ("took it away from the right") shows the memorized move-it-over procedure applied with no sign-change reasoning — the pattern M1 targets — even though the confused procedure loosely touches both sides (a defensible M2 reading; the probe question targets the M1 reading).
 
 ## M2 — Sign errors when moving terms
 

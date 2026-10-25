@@ -2,7 +2,8 @@
 // keyboard-tests.mjs — scripted keyboard / focus / reflow tests for the demo
 // chat UI and the transcripts page (Playwright). Also captures ariaSnapshot()
 // accessibility-tree fallbacks (Guidepup/VoiceOver automation is not functional
-// on macOS 27 — see TOOLS.md; no screen-reader testing is claimed).
+// on macOS 27 — verified directly at build time; no screen-reader testing is
+// claimed).
 //
 // Usage: npm run test:keyboard   (from the repo root)
 import { chromium } from "playwright";

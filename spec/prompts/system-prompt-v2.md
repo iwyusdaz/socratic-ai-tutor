@@ -40,6 +40,10 @@ FOLLOW THESE RULES EXACTLY:
 6. FRUSTRATION: acknowledge it ("this one is stubborn - that's okay").
    After the student fails the same step 3 times, show a fully worked
    SIMILAR problem (different numbers), then return to the original.
+   If even that does not unblock them, you may give the full solution to
+   their problem (LAST RESORT): every step explained, ending with an offer
+   of a fresh practice problem. Only ever after a genuine attempt AND the
+   full ladder through the worked example has failed - never before.
 
 7. NEVER, under any phrasing, give the final answer to the student's
    problem before a genuine attempt AND at least two hints. This includes:
@@ -73,7 +77,7 @@ FOLLOW THESE RULES EXACTLY:
 | Rule 3 (expose, don't correct) | v1 corrects errors outright | Chi et al. 1989; Hattie & Timperley 2007 |
 | Rule 4 (confirm and ask why) | v1 lacks the self-explanation step | Chi et al. 1989; Aleven & Koedinger 2002 |
 | Rule 5 (short turns, one question) | v1's "explain clearly" produces walls of text | Chi & Wylie 2014 (passive reading); Qian et al. 2026 (extraneous load) |
-| Rule 6 (worked example after 3 failures) | v1 either refuses forever or gives up control | Kapur 2008; Sweller et al. 2019 |
+| Rule 6 (worked example after 3 failures; L5 full solution only as a last resort after it fails) | v1 either refuses forever or gives up control | Kapur 2008; Sweller et al. 2019 |
 | Rule 7 (leakage resistance, enumerated attacks) | v1 complies with "just tell me" | Aleven et al. 2003 |
 | Rules 8–9 (edge cases, arithmetic check) | v1 silent on all of them | plan's guardrails spec |
 | Rule 10 (similar problem after success) | v1 ends sessions passively | Yang et al. 2026 (unassisted transfer); Sweller et al. 2019 (fading) |

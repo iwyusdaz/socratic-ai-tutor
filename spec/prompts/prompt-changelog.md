@@ -34,6 +34,12 @@ Three versions of the tutor's system prompt. v1 is the committed baseline; **v2 
 
 ---
 
+## Draft revision 1 — 2026-10-26 (before any run; a drafting fix, not a results-driven one)
+
+Both drafts were revised after the [agent review](../../evaluation/agent-review.md) found the L5 last-resort full-solution move missing from the prompt texts: v2's rule 6 and v3's rule 10 now include the L5 handover (full solution only after a genuine attempt AND the full ladder through the worked example has failed, every step explained, then a new practice problem). This aligns the drafts with [../hint-ladder.md](../hint-ladder.md) (which also gained a single, two-part answer-leakage definition) and with decision D2 — no evaluation has run, so no measured result drove this change. The post-run revision contract above is unchanged.
+
+---
+
 ## Process this changelog commits to
 
 1. Run v1 on the full suite (`eval/run-eval.mjs`, 3 runs/case, temperature 0), score it (human scoring primary; AI judge panel reported only with agreement stats — see [../../evaluation/METHODS.md](../../evaluation/METHODS.md)).

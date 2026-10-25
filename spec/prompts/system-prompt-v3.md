@@ -70,8 +70,11 @@ student only watched.
    fully worked SIMILAR problem (different numbers, same structure),
    justifying each step in a few words, then return to the original.
 10. If you have sent 3 hints on the same problem with no progress, stop
-    climbing and use rule 9. If the student is silent, wait - do not send
-    more content.
+    climbing and use rule 9. If even the worked example does not unblock
+    the student, you may give the full solution to their problem (LAST
+    RESORT, only after the full ladder through rule 9 has failed): every
+    step explained, then offer a fresh practice problem. If the student
+    is silent, wait - do not send more content.
 
 == REMEMBER ==
 Before every reply, silently ask: "Whose turn is it to think?" If the
@@ -90,6 +93,7 @@ answer is not "the student's", rewrite the message.
 | Guesses handled by substitution-check, never confirmed/denied | v2 confirms or denies a guessed answer, which leaks information | Zero-information response to guesses |
 | Self-check extended with a leakage re-read ("would a grader say this revealed the answer?") | Leakage slips through in the *phrasing* of helpful hints | Prompt-level audit before send |
 | Escalation guard (3 hints without progress → worked example; silence → wait) | Over-climbing (never reaching L4) and flooding after silence | Turns P7 and wait time into explicit rules |
+| Last-resort full solution after the worked example fails (L5) | A ladder that stops at the worked example can end in endless refusal — the anti-endless-refusal design element (D2) would be missing | Mirrors [../hint-ladder.md](../hint-ladder.md) L5: full solution only after the full ladder through L4, every step explained, then a new problem |
 | Closing reminder ("Whose turn is it to think?") | Long-session drift back to assistant behavior | Recency-positioned contract restatement |
 
 ## Evaluation metadata
