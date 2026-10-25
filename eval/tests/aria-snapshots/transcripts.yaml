@@ -1,0 +1,37 @@
+- main:
+  - heading "Example transcripts" [level=1]
+  - strong: Example transcripts coming soon — pending real evaluation runs.
+  - text: No evaluation has run yet, so there are no real tutor conversations to show here. Nothing on this page is simulated, invented, or written by hand to look like model output.
+  - heading "What will appear here" [level=2]
+  - paragraph:
+    - text: Once the evaluation pipelines have run with real API keys, this page will publish 6–8
+    - strong: curated, verbatim transcripts from real runs
+    - text: "— including at least one v1-baseline failure and one v3 success on the same case, side by side, so the difference in tutor behavior is visible. Every transcript will be labeled with:"
+  - list:
+    - listitem:
+      - text: the test case ID and category from
+      - link "eval/test-cases.json":
+        - /url: https://github.com/iwyusdaz/socratic-ai-tutor/blob/main/eval/test-cases.json
+      - text: ;
+    - listitem: the prompt version it came from;
+    - listitem: the tutor model name, temperature and run date;
+    - listitem: the rubric scores it received, and from whom (human scorer and/or the blinded AI judge panel, labeled by method).
+  - heading "Why transcripts, not screenshots of a fake chat" [level=2]
+  - paragraph:
+    - text: This project's claim is about
+    - emphasis: tutor behavior
+    - text: ", and behavior evidence should be inspectable. Publishing real transcripts — including unflattering ones — is the honest version of a \"before/after\" demo. Publishing anything else would be fabrication. The"
+    - link "live demo":
+      - /url: ../demo/index.html
+    - text: exists so you can exercise the v3 prompt yourself with your own key while the evaluation runs are pending.
+  - heading "Where the raw material lives" [level=2]
+  - paragraph:
+    - text: Raw run outputs are written to
+    - code: eval/results/<version>/
+    - text: as JSON plus readable Markdown transcripts (one file per case per run), with the model name, date and parameters recorded in every file. When runs exist, they will appear in the repository under
+    - link "eval/results/":
+      - /url: https://github.com/iwyusdaz/socratic-ai-tutor/tree/main/eval/results
+    - text: . Until then that directory contains only a
+    - link "PENDING summary table":
+      - /url: https://github.com/iwyusdaz/socratic-ai-tutor/blob/main/eval/results/summary.md
+    - text: .

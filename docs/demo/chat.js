@@ -154,7 +154,9 @@
   el.clearKeyBtn.addEventListener("click", function () {
     apiKey = null;
     el.clearKeyBtn.disabled = true;
-    setStatus("Key cleared from memory. Nothing was stored anywhere.", "");
+    setChatEnabled(false);
+    el.typing.textContent = "";
+    setStatus("Key cleared from memory. Nothing was stored anywhere. The chat is disabled until you connect a key again.", "");
   });
 
   el.resetBtn.addEventListener("click", function () {

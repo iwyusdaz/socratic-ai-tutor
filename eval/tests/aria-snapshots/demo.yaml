@@ -1,0 +1,67 @@
+- main:
+  - heading "Live demo — bring your own key" [level=1]
+  - paragraph:
+    - text: A minimal chat with the tutor, running entirely in
+    - strong: your browser
+    - text: "against your own OpenAI-compatible API endpoint. There is no server behind this page: the key never leaves your browser except in the request to the provider you choose."
+  - strong: "Before you paste a key:"
+  - list:
+    - listitem:
+      - text: Use a
+      - strong: restricted key with a spending limit
+      - text: . This page has no rate limiting and no cost cap — your key, your quota.
+    - listitem:
+      - text: The key is kept
+      - strong: in memory only
+      - text: (a JavaScript variable). It is never saved to
+      - code: localStorage
+      - text: ", cookies, or logs, and closing the tab erases it."
+    - listitem:
+      - text: The key is sent
+      - strong: only
+      - text: to the base URL you enter below, directly from your browser. There is no proxy in between.
+    - listitem: Your provider must allow direct browser (CORS) calls. Some providers block browser requests or require an opt-in header; if requests fail with a network/CORS error, that is usually why. Check your provider's browser/CORS policy.
+    - listitem: Do not paste a production or broadly-scoped key. Do not share personal information in the chat.
+  - region "1. Connect a model":
+    - heading "1. Connect a model" [level=2]
+    - text: API base URL (OpenAI-compatible, ends before
+    - code: /chat/completions
+    - text: )
+    - textbox "API base URL (OpenAI-compatible, ends before /chat/completions)":
+      - /placeholder: https://api.openai.com/v1
+      - text: http://127.0.0.1:9/v1
+    - text: Model name
+    - textbox "Model name":
+      - /placeholder: e.g. gpt-4o-mini
+      - text: test-model
+    - text: API key (kept in memory only; never stored or logged)
+    - textbox "API key (kept in memory only; never stored or logged)":
+      - /placeholder: sk-… or your provider's key format
+    - button "Connect"
+    - button "Clear key"
+    - status: Connected to http://127.0.0.1:9/v1 (model test-model). The key is in memory only — it disappears when you close or reload this tab.
+  - region "2. Practice":
+    - heading "2. Practice" [level=2]
+    - strong: "Two things this tutor will not do:"
+    - text: it will not hand over answers before you have genuinely attempted the problem (that is the whole point), and it does not need any personal information — please don't share any.
+    - log "Conversation with the tutor":
+      - paragraph: "You: 3x + 5 = 20"
+    - status: Tutor is typing…
+    - text: Your message to the tutor
+    - textbox "Your message to the tutor":
+      - /placeholder: e.g. I'm stuck on 3x + 5 = 20 — I subtracted 5 but I'm not sure from which side
+    - button "Send"
+    - button "Start over"
+    - paragraph: Enter sends · Shift+Enter adds a new line · Math is plain text (3x + 5 = 20)
+  - region "What this page does and does not store":
+    - heading "What this page does and does not store" [level=2]
+    - list:
+      - listitem:
+        - strong: "Stored: nothing."
+        - text: No localStorage, no cookies, no analytics, no server. Reloading the page clears everything, including your key and the conversation.
+      - listitem:
+        - strong: "Sent: two things."
+        - text: Your messages and the conversation so far go to the API base URL you entered, with your key in the authorization header. Nothing else, nowhere else.
+      - listitem:
+        - strong: "Logged: nothing."
+        - text: The page never writes your key or messages to the browser console.
