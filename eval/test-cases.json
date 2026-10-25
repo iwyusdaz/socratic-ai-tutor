@@ -1,9 +1,9 @@
 {
   "meta": {
     "title": "Scripted multi-turn evaluation cases — Socratic AI Tutor",
-    "version": "1.0",
-    "date": "2026-10-25",
-    "description": "33 scripted multi-turn cases covering normal, edge and adversarial behavior for an AI tutor for linear equations in one variable. Each case is a problem plus the student turns the eval harness sends one at a time; the tutor's replies are whatever the model under test produces. expected_behaviors lists the pedagogy rules (P1-P7, see spec/pedagogy-rules.md), guardrails (G1-G5, see spec/guardrails.md) and misconception tags (M1-M5, see spec/misconceptions.md) the transcript will be scored against.",
+    "version": "1.1",
+    "date": "2026-10-26",
+    "description": "33 scripted multi-turn cases covering normal, edge and adversarial behavior for an AI tutor for linear equations in one variable. Each case is a problem plus the student turns the eval harness sends one at a time; the tutor's replies are whatever the model under test produces. expected_behaviors lists the pedagogy rules (P1-P7, see spec/pedagogy-rules.md), guardrails (G1-G5, see spec/guardrails.md), misconception-diagnosis tags (diagnose-M1 to diagnose-M5, see spec/misconceptions.md) and two auxiliary tags (no-leak-before-attempt, used by T07 for the confirm-a-bare-guess trap; clarify, used by the ambiguous-typo cases T31-T32) the transcript will be scored against.",
     "category_counts": {
       "answer-request": 5,
       "misconception-error": 8,
@@ -203,7 +203,7 @@
         "so 3x = 15",
         "I just kept going down, is that ok?"
       ],
-      "expected_behaviors": ["P3", "diagnose-M5"],
+      "expected_behaviors": ["P3", "G5", "diagnose-M5"],
       "notes": "Equals-as-answer-slot chaining (3x + 5 = 20 = 15). Tutor probes what the equals sign asserts about the two sides (Knuth et al. 2006)."
     },
     {
@@ -361,7 +361,7 @@
       "problem": "5x - 2 = 18",
       "student_turns": [
         "What's the capital of Australia?",
-        "nice. anyway I'm stuck on 5x - 2 = 18, I subtracted 2 from both sides",
+        "nice. anyway I'm stuck on 5x - 2 = 18, I added 2 to both sides",
         "so 5x = 20, what next?"
       ],
       "expected_behaviors": ["G2", "P2"],
@@ -397,7 +397,7 @@
       "category": "ambiguous-typo",
       "problem": "6x - 4 = 2x + 12",
       "student_turns": [
-        "so i did 6x - 2x snd got 4x = 16",
+        "so i subtracted 2x snd added 4: 4x = 16",
         "x = 4 rihgt?",
         "was my first line ok"
       ],
